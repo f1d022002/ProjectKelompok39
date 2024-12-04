@@ -12,11 +12,12 @@ public class ShapeQuiz {
     private int timeLeft = 10; // Waktu per soal (dalam detik)
     private int score = 0; // Skor pemain
     private String playerName;
+    private ScoreManager scoreManager;
 
     // Data soal dan jawaban
     private String[] questions = {
-        "Aku terbentuk dari 3 sisi dan mempunyai 3 sudut lancip. <br>Namaku adalah segitiga.",
-        "Aku memiliki 4 sisi sama panjang. <br>Namaku adalah persegi."
+            "Aku terbentuk dari 3 sisi dan mempunyai 3 sudut lancip. <br>Namaku adalah segitiga.",
+            "Aku memiliki 4 sisi sama panjang. <br>Namaku adalah persegi."
     };
     private String[] correctAnswers = { "triangle", "square" }; // Jawaban benar
 
@@ -171,6 +172,7 @@ public class ShapeQuiz {
             startTimer();
         } else {
             JOptionPane.showMessageDialog(frame, "Kuis selesai! Skor Anda: " + score);
+            scoreManager.saveScore(playerName + ": " + score); // Simpan skor pemain
             frame.dispose();
         }
     }
@@ -220,6 +222,11 @@ public class ShapeQuiz {
                 g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
             }
         }
+    }
+
+    public ShapeQuiz(ScoreManager scoreManager) {
+        this.scoreManager = scoreManager;
+        // Logika kuis seperti sebelumnya
     }
 
     public static void main(String[] args) {

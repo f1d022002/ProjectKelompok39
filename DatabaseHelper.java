@@ -1,15 +1,17 @@
+package ProjekPBO;
+
 import java.sql.*;
 import java.util.ArrayList;
 
 public class DatabaseHelper {
-    private static final String DATABASE_NAME = "findmatch";
+    private static final String DATABASE_NAME = "findmatch1";
     private static final String QUESTIONS_TABLE_NAME = "questions3";
     private static final String SCORES_TABLE_NAME = "scores";
     private static final String DB_URL = "jdbc:mysql://localhost:3306/" + DATABASE_NAME;
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "";
 
-    // Memuat semua soal dari tabel questions3
+    // membuat conneksi dan Memuat semua soal dari tabel questions3
     public ArrayList<Match> loadQuestions() {
         ArrayList<Match> questionList = new ArrayList<>();
         String query = "SELECT * FROM " + QUESTIONS_TABLE_NAME;
@@ -64,3 +66,4 @@ public class DatabaseHelper {
         }
     }
 }
+

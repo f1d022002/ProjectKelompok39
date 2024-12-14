@@ -180,7 +180,7 @@ public class ScoreBoard extends JFrame {
     }
 
     public void openSortedScoresFrame() {
-        JFrame sortedFrame = new JFrame("Sorted Scores");
+        JFrame sortedFrame = new JFrame("Leaderboard");
         sortedFrame.setSize(800, 600);
         sortedFrame.setLocationRelativeTo(null);
         sortedFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

@@ -102,26 +102,26 @@ public class GameBoard {
 
     private void displayQuestion(JPanel gamePanel) {
         Match currentQuestion = questionList.get(currentQuestionIndex);
-    
+
         // Gunakan GridBagLayout pada gamePanel
         gamePanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
-        
+
         // Menampilkan soal
-        questionLabel = new JLabel("<html>" + currentQuestion.getClue() + "</html>");
+        questionLabel = new JLabel("<html>" + currentQuestion.getQuestions() + "</html>");
         questionLabel.setFont(new Font("Arial", Font.BOLD, 25));
         questionLabel.setForeground(new Color(174, 158, 108)); // Set text color to sand color
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 3; // Membuat label mengambil 3 kolom
         gamePanel.add(questionLabel, gbc);
-    
+
         // Menampilkan gambar pilihan
         JPanel optionPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbcOption = new GridBagConstraints();
         gbcOption.insets = new Insets(10, 10, 10, 10); // Menambahkan jarak antar tombol gambar
-        int imageWidth = 180;  // Lebar gambar yang lebih besar
+        int imageWidth = 180; // Lebar gambar yang lebih besar
         int imageHeight = 180; // Tinggi gambar yang lebih besar
 
         // Menambahkan border luar pada panel gambar
@@ -129,32 +129,38 @@ public class GameBoard {
         optionPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 150, 20)); // Tambahkan ruang di sekitar panel
 
         // Tombol gambar pertama
-        imageButton1 = new JButton(new ImageIcon(resizeImage(currentQuestion.getImagePath1(), imageWidth, imageHeight)));
+        imageButton1 = new JButton(
+                new ImageIcon(resizeImage(currentQuestion.getImagePath1(), imageWidth, imageHeight)));
         imageButton1.setPreferredSize(new Dimension(imageWidth, imageHeight));
-        imageButton1.addActionListener(createOptionListener(currentQuestion.getCorrectAnswer(), currentQuestion.getImagePath1()));
+        imageButton1.addActionListener(
+                createOptionListener(currentQuestion.getCorrectAnswer(), currentQuestion.getImagePath1()));
         imageButton1.setMargin(new Insets(10, 10, 10, 10)); // Menambahkan margin 10 piksel di setiap sisi tombol
         gbcOption.gridx = 0;
         gbcOption.gridy = 0;
         optionPanel.add(imageButton1, gbcOption);
 
         // Tombol gambar kedua
-        imageButton2 = new JButton(new ImageIcon(resizeImage(currentQuestion.getImagePath2(), imageWidth, imageHeight)));
+        imageButton2 = new JButton(
+                new ImageIcon(resizeImage(currentQuestion.getImagePath2(), imageWidth, imageHeight)));
         imageButton2.setPreferredSize(new Dimension(imageWidth, imageHeight));
-        imageButton2.addActionListener(createOptionListener(currentQuestion.getCorrectAnswer(), currentQuestion.getImagePath2()));
+        imageButton2.addActionListener(
+                createOptionListener(currentQuestion.getCorrectAnswer(), currentQuestion.getImagePath2()));
         imageButton2.setMargin(new Insets(10, 10, 10, 10)); // Menambahkan margin 10 piksel di setiap sisi tombol
         gbcOption.gridx = 1;
         gbcOption.gridy = 0;
         optionPanel.add(imageButton2, gbcOption);
 
         // Tombol gambar ketiga
-        imageButton3 = new JButton(new ImageIcon(resizeImage(currentQuestion.getImagePath3(), imageWidth, imageHeight)));
+        imageButton3 = new JButton(
+                new ImageIcon(resizeImage(currentQuestion.getImagePath3(), imageWidth, imageHeight)));
         imageButton3.setPreferredSize(new Dimension(imageWidth, imageHeight));
-        imageButton3.addActionListener(createOptionListener(currentQuestion.getCorrectAnswer(), currentQuestion.getImagePath3()));
+        imageButton3.addActionListener(
+                createOptionListener(currentQuestion.getCorrectAnswer(), currentQuestion.getImagePath3()));
         imageButton3.setMargin(new Insets(10, 10, 10, 10)); // Menambahkan margin 10 piksel di setiap sisi tombol
         gbcOption.gridx = 2;
         gbcOption.gridy = 0;
         optionPanel.add(imageButton3, gbcOption);
-    
+
         // Menambahkan panel pilihan ke dalam gamePanel
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -170,13 +176,12 @@ public class GameBoard {
         gbc.gridwidth = 3;
         gamePanel.add(timerLabel, gbc);
     }
-    
 
     // Fungsi untuk menyesuaikan ukuran gambar
     private Image resizeImage(String imagePath, int width, int height) {
-        ImageIcon icon = new ImageIcon(imagePath);  // Membaca gambar
-        Image img = icon.getImage();  // Mengambil objek gambar dari icon
-        return img.getScaledInstance(width, height, Image.SCALE_SMOOTH);  // Mengubah ukuran gambar
+        ImageIcon icon = new ImageIcon(imagePath); // Membaca gambar
+        Image img = icon.getImage(); // Mengambil objek gambar dari icon
+        return img.getScaledInstance(width, height, Image.SCALE_SMOOTH); // Mengubah ukuran gambar
     }
 
     private ActionListener createOptionListener(String correctAnswer, String selectedImagePath) {
@@ -196,12 +201,12 @@ public class GameBoard {
         if (currentQuestionIndex < questionList.size() - 1) {
             currentQuestionIndex++; // Pindah ke soal berikutnya
             frame.getContentPane().removeAll(); // Hapus soal sebelumnya
-            
+
             // Buat panel game baru dan tampilkan soal berikutnya
             JPanel gamePanel = new BackgroundPanel("D:\\semester 5\\PBO\\ProjectKelompok39\\images\\br_game2.jpg");
             gamePanel.setLayout(new BorderLayout()); // Tetapkan tata letak panel
             displayQuestion(gamePanel); // Tampilkan soal pada gamePanel
-            
+
             frame.add(gamePanel); // Tambahkan panel soal ke frame
             frame.revalidate(); // Revalidate frame agar perubahan diterapkan
             frame.repaint(); // Repaint frame agar tampilan diperbarui

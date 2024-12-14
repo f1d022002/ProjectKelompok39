@@ -15,11 +15,14 @@ public class ScoreBoard extends JFrame {
         gameMusic.playMusicScore(); // Memutar musik skor
     }
 
-    public void loadScores() {
+    public void loadScores(boolean isSorted) {
         DatabaseHelper dbHelper = new DatabaseHelper();
-        ResultSet resultSet = dbHelper.getScores(); // Mengambil skor dari database
+        ResultSet resultSet = isSorted ? dbHelper.getSortedScores() : dbHelper.getScores(false); // Mengambil skor dari
+                                                                                                 // database
 
         try {
+            scoresPanel.removeAll(); // Membersihkan panel sebelum memuat ulang
+
             if (resultSet != null) { // Memeriksa jika ada data
                 while (resultSet.next()) { // Iterasi data hasil query
                     String playerName = resultSet.getString("player_name");
@@ -50,6 +53,9 @@ public class ScoreBoard extends JFrame {
                 noDataLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                 scoresPanel.add(noDataLabel); // Menampilkan pesan jika tidak ada data
             }
+
+            scoresPanel.revalidate();
+            scoresPanel.repaint();
         } catch (SQLException e) {
             e.printStackTrace(); // Menangani error database
             JLabel errorLabel = new JLabel("Gagal mengambil skor.", SwingConstants.CENTER);
@@ -82,8 +88,9 @@ public class ScoreBoard extends JFrame {
         JPanel topPanel = new JPanel(new BorderLayout()); // Panel atas untuk tombol kembali dan judul
         topPanel.setOpaque(false);
 
-        JButton backButton = new JButton(new ImageIcon(new ImageIcon("D:/praktikum/SEMESTER 5/PROJECT KELOMPOK 39/assets/images/back.png")
-                .getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH))); // Tombol kembali
+        JButton backButton = new JButton(
+                new ImageIcon(new ImageIcon("D:/praktikum/SEMESTER 5/PROJECT KELOMPOK 39/assets/images/back.png")
+                        .getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH))); // Tombol kembali
         backButton.setBorderPainted(false);
         backButton.setContentAreaFilled(false);
         backButton.setFocusPainted(false);
@@ -133,7 +140,7 @@ public class ScoreBoard extends JFrame {
         scoresPanel.setLayout(new BoxLayout(scoresPanel, BoxLayout.Y_AXIS));
         scoresPanel.setOpaque(false);
 
-        loadScores(); // Memuat skor dari database
+        loadScores(false); // Memuat skor dari database tanpa pengurutan
 
         JScrollPane scrollPane = new JScrollPane(scoresPanel); // Scroll untuk panel skor
         scrollPane.setOpaque(false);
@@ -152,7 +159,58 @@ public class ScoreBoard extends JFrame {
         backgroundPanel.add(mainPanel, BorderLayout.CENTER); // Menambahkan panel utama ke latar belakang
         frame.add(backgroundPanel); // Menambahkan latar belakang ke frame
         frame.setVisible(true); // Menampilkan frame
+
+        // Panel untuk tombol urutkan skor
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // Mengatur tombol di kanan bawah
+        buttonPanel.setOpaque(false);
+        JButton sortButton = new JButton("Urutkan Skor"); // Tombol urutkan skor
+        sortButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        sortButton.setForeground(Color.BLACK);
+        sortButton.setPreferredSize(new Dimension(150, 40)); // Sesuaikan ukuran tombol jika diperlukan
+        sortButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openSortedScoresFrame(); // Membuka frame baru dengan skor yang sudah diurutkan
+            }
+        });
+        buttonPanel.add(sortButton); // Menambahkan tombol ke panel
+
+        backgroundPanel.add(buttonPanel, BorderLayout.SOUTH); // Menambahkan panel tombol ke bagian bawah
+
+    }
+
+    public void openSortedScoresFrame() {
+        JFrame sortedFrame = new JFrame("Sorted Scores");
+        sortedFrame.setSize(800, 600);
+        sortedFrame.setLocationRelativeTo(null);
+        sortedFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        JPanel sortedPanel = new JPanel(new BorderLayout());
+
+        JButton backButton = new JButton("Kembali");
+        backButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        backButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sortedFrame.dispose(); // Menutup frame sorted scores
+            }
+        });
+
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.add(backButton, BorderLayout.WEST);
+
+        JPanel sortedScoresPanel = new JPanel();
+        sortedScoresPanel.setLayout(new BoxLayout(sortedScoresPanel, BoxLayout.Y_AXIS));
+        loadScores(true); // Memuat skor dengan urutan
+        JScrollPane sortedScrollPane = new JScrollPane(scoresPanel);
+        sortedScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        sortedScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        sortedPanel.add(headerPanel, BorderLayout.NORTH);
+        sortedPanel.add(sortedScrollPane, BorderLayout.CENTER);
+
+        sortedFrame.add(sortedPanel);
+        sortedFrame.setVisible(true);
     }
 }
-
-
